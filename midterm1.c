@@ -14,7 +14,7 @@ double pi_leibniz (int n)  {
 
   if (n >= 0)  {
 
-    return 4*pow(-1,j)/(2*j+1) + pi_leibniz (n - 1); //remember to watch types of variables
+    return 4*pow(-1,j)/(2*j+1) + pi_leibniz (n - 1);
 
   }
   else  {
@@ -24,22 +24,30 @@ double pi_leibniz (int n)  {
   }
 }
 
-void pi_bbp (int);
+double pi_bbp (int);
 
-void pi_bbp (int n)  {
+double pi_bbp (int n)  {
 
-  double i = n;
+  double j = n;
 
-  // return (/* fill in series shit here as function of i*/) + pi_bbp (n - 1); //remember to watch types of variables
+  if ( n >= 0 ) {
+
+  return (1 / pow ( 16 , j ) ) * ( 4 / ( 8 * j + 1) - 2 / ( 8 * j + 4) - 1 / ( 8 * j + 5) - 1 / ( 8 * j + 6)) + pi_bbp (n - 1);
+
+  }
+  else {
+
+    return 0;
+
+  }
 }
 
-int main(void)  {
+int main(void)  { // j and n are just used as iteration variables n
 
-  int n = 100000;
+  int n = 100;
 
-  printf("%10.10f\n", pi_leibniz (n));
+  printf("%10.20f\n", pi_leibniz (n) );
 
-  // pi_bbp (n);
-
+  printf("%10.20f\n", pi_bbp (n) );
 
 }
