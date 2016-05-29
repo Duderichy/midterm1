@@ -1,5 +1,6 @@
 /*
-
+This program contains two important functions which are recursive and calculate
+the value of pi to a certain accuracy depending on the number of terms used
 */
 
 #include <stdio.h>
@@ -9,28 +10,36 @@ double pi_leibniz (int);
 
 double pi_leibniz (int n)  {
   // The parameter of the function is the number of the terms in the series to keep.
-  double i = n;
+  double j = n;
 
-  return (-1)^i/(2i+1) + double pi_leibniz (int n - 1); //remember to watch types of variables
+  if (n >= 0)  {
 
+    return 4*pow(-1,j)/(2*j+1) + pi_leibniz (n - 1); //remember to watch types of variables
+
+  }
+  else  {
+
+    return 0;
+
+  }
 }
 
-double pi_bbp (int);
+void pi_bbp (int);
 
-double pi_bbp (int n)  {
+void pi_bbp (int n)  {
 
   double i = n;
 
-  return (/* fill in series shit here*/) + double pi_bbp (int n - 1); //remember to watch types of variables
+  // return (/* fill in series shit here as function of i*/) + pi_bbp (n - 1); //remember to watch types of variables
 }
 
 int main(void)  {
 
-  int n;
+  int n = 100000;
 
-  double pi_leibniz (int n);
+  printf("%10.10f\n", pi_leibniz (n));
 
-  double pi_bbp (int);
+  // pi_bbp (n);
 
 
 }
