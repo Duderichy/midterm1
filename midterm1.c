@@ -7,17 +7,21 @@ the value of pi to a certain accuracy depending on the number of terms used
 
 #include <stdio.h>
 #include <math.h>
+#include <sys/time.h>
 
 double pi_leibniz (int);
 
 double pi_leibniz (int n)  {
+
   // The parameter of the function is the number of the terms in the series to keep.
+  // This function uses Leibniz's series for estimating pi using n terms
+
   double j;
   double pi = 0;
 
   for (j = 0; j <= n; j++)  {
 
-    pi = 4*pow(-1,j)/(2*j+1) + pi;
+    pi = 4 * pow ( -1 ,j ) / ( 2 * j + 1 ) + pi;
 
   }
 
@@ -28,6 +32,9 @@ double pi_leibniz (int n)  {
 double pi_bbp (int);
 
 double pi_bbp (int n)  {
+
+  // The parameter of the function is the number of the terms in the series to keep.
+  // This function uses the Bailey-Borwein-Plouffe series to estimate pi using n terms
 
   double j;
   double pi = 0;
@@ -44,14 +51,11 @@ double pi_bbp (int n)  {
 int main(void)  { // j and n are just used as iteration variables n
 
   int i = 1;
-
   double pi;
-
   double abserr;
-
   double tol = pow ( 10 , -6 );
 
-  do {
+  do { //doubles the amount of terms in the pi_leibniz series until error is less than 10^-6
 
     pi = pi_leibniz (i);
 
@@ -65,7 +69,7 @@ int main(void)  { // j and n are just used as iteration variables n
 
   i = 1;
 
-  do {
+  do { //doubles the amount of terms in the pi_bbp series until error is less than 10^-6
 
     pi = pi_bbp (i);
 
@@ -77,8 +81,50 @@ int main(void)  { // j and n are just used as iteration variables n
 
   } while ( abserr > tol );
 
-  //printf("%10.20f\n", pi_leibniz (n) );
+  int count = 1000;
+  double time;
+  double time1;
+  double tmin = 1;
+  double tmax = 2;
 
-  //printf("%10.20f\n", pi_bbp (n) );
+  do {
+      timer_start ();
+
+      pi_leibniz (1048576);
+
+      time = timer_stop ();
+      time1 = time / count;
+      printf (" %10.2f usec     %10.6f sec    %10d\n",
+          time1 * 1.e6, time, count);
+
+      /*
+       * adjust count such that cpu time is between
+       * tmin and tmax
+       */
+
+      count = adjust_rep_count (count, time, tmin, tmax);
+
+  } while ((time > tmax) || (time < tmin));
+
+  do {
+      timer_start ();
+
+      pi_bbp (4);
+
+      time = timer_stop ();
+      time1 = time / count;
+      printf (" %10.2f usec     %10.6f sec    %10d\n",
+          time1 * 1.e6, time, count);
+
+      /*
+       * adjust count such that cpu time is between
+       * tmin and tmax
+       */
+
+      count = adjust_rep_count (count, time, tmin, tmax); //just use scanf??
+
+  } while ((time > tmax) || (time < tmin));
+
+  return 0;
 
 }
