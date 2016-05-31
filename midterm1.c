@@ -7,7 +7,8 @@ the value of pi to a certain accuracy depending on the number of terms used
 
 #include <stdio.h>
 #include <math.h>
-#include <sys/time.h>
+#include "timer.h"
+#include "adjust.h"
 
 double pi_leibniz (int);
 
@@ -81,19 +82,29 @@ int main(void)  { // j and n are just used as iteration variables n
 
   } while ( abserr > tol );
 
-  int count = 1000;
+  // end of code figuring out number of terms needed for 10^-6 accuracy
+
+  int count = 10;
   double time;
   double time1;
   double tmin = 1;
   double tmax = 2;
 
+  printf("pi_leibniz\n");
+
   do {
       timer_start ();
 
-      pi_leibniz (1048576);
+      for (int k = 0; k <= count; k++) {
+
+        pi_leibniz (1048576);
+
+      }
 
       time = timer_stop ();
+
       time1 = time / count;
+
       printf (" %10.2f usec     %10.6f sec    %10d\n",
           time1 * 1.e6, time, count);
 
@@ -104,24 +115,33 @@ int main(void)  { // j and n are just used as iteration variables n
 
       count = adjust_rep_count (count, time, tmin, tmax);
 
+
   } while ((time > tmax) || (time < tmin));
 
+  printf("pi_pbb\n");
+
   do {
+
       timer_start ();
 
-      pi_bbp (4);
+      for (int k = 0; k < count; k++) {
+
+        pi_bbp (4);
+
+      }
 
       time = timer_stop ();
+
       time1 = time / count;
-      printf (" %10.2f usec     %10.6f sec    %10d\n",
-          time1 * 1.e6, time, count);
+
+      printf (" %10.2f usec     %10.6f sec    %10d\n", time1 * 1.e6, time, count);
 
       /*
        * adjust count such that cpu time is between
        * tmin and tmax
        */
 
-      count = adjust_rep_count (count, time, tmin, tmax); //just use scanf??
+      count = adjust_rep_count (count, time, tmin, tmax);
 
   } while ((time > tmax) || (time < tmin));
 
